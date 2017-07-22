@@ -16,7 +16,6 @@ cffi==1.10.0
 click==6.7
 clyent==1.2.0
 colorama==0.3.6
-conda-build==1.19.0
 configobj==5.0.6
 cryptography==1.7.1
 cssselect==1.0.0
