@@ -17,7 +17,7 @@ HEADER = {
 
 
 def reply_text(reply_token, text):
-    reply = "ここに内容をいれる"
+    reply = "hoge"
     payload = {
         "replyToken": reply_token,
         "messages": [

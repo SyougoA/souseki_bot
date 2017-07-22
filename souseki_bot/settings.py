@@ -25,8 +25,17 @@ SECRET_KEY = 'zr0&h1=&ga*iyn%**6u)!-zlff#tfma)zs#d$2)#nzj_4*0=ij'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'murmuring-ravine-81353.herokuapp.com']
 
+# heroku
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+    )
 
 # Application definition
 
