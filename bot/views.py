@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-import json, requests
+import json, requests, random
 # Create your views here.
 
 
@@ -12,12 +12,16 @@ HEADER = {
     "Authorization": "Bearer" + ACCESS_TOKEN
 }
 
-# def index(request):
-#     return HttpResponse("Hello, world")
+
+def index(request):
+    return HttpResponse("This is bot api")
 
 
+# この引数のtextは何を表しているのか
 def reply_text(reply_token, text):
-    reply = "hoge"
+    face = ["( ๑❛ᴗ❛๑)۶♡٩(๑❛ᴗ❛๑ )", "(o´艸`)ﾑﾌﾌ", "ｱﾘｶﾞﾀﾋﾞｰﾑ!!(ﾉ･_･)‥‥…━━━━━☆ﾋﾟｰｰ", "ヾ(｡>﹏<｡)ﾉ", "_(:З｣ ∠)_"]
+    random_num = random.randint(0, 4)
+    reply = face[random_num]
     payload = {
         "replyToken": reply_token,
         "messages": [
