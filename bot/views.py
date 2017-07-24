@@ -9,7 +9,7 @@ ACCESS_TOKEN = "eLDX1DFCu3LxW6KpNXxKQXnmuc5bQoj6nSpoUFUZYXkhdqc0UU5VfnTwMh8WAKYp
 
 HEADER = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer" + ACCESS_TOKEN
+    "Authorization": "Bearer " + ACCESS_TOKEN
 }
 
 
@@ -36,7 +36,7 @@ def reply_text(reply_token, text):
 
     return reply
 
-
+# postmethodなのでget使用としてもうまくいかない
 def callback(request):
     reply = ""
     requests_json = json.loads(request.body.decode('utf-8'))# 辞書型に変更
