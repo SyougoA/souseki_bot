@@ -1,27 +1,44 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-import json, requests, random
+from gensim.models import word2vec
+import json, requests, os
+
 # Create your views here.
 
 
 REPLY_ENDPORT = "https://api.line.me/v2/bot/message/reply" #api_reference参考
 ACCESS_TOKEN = "eLDX1DFCu3LxW6KpNXxKQXnmuc5bQoj6nSpoUFUZYXkhdqc0UU5VfnTwMh8WAKYprlMqiYMWk/ijMaEBem3bAAJ3dzPvhTZoccD+XcSstklU47hCINgyvHrfTQ0PHP8SWl5RvBCkeKJ2XYv0opWOoQdB04t89/1O/w1cDnyilFU="
 
+# Bearerのあとインデントをつけること!
 HEADER = {
     "Content-Type": "application/json",
     "Authorization": "Bearer " + ACCESS_TOKEN
 }
+
+#これで相対パスを取得
+model_path = os.path.dirname(__file__) + "/model_person/souseki.model"
+model_data = word2vec.Word2Vec.load(model_path)
 
 
 def index(request):
     return HttpResponse("This is bot api")
 
 
-# この引数のtextは何を表しているのか
 def reply_text(reply_token, text):
-    face = ["( ๑❛ᴗ❛๑)۶♡٩(๑❛ᴗ❛๑ )", "(o´艸`)ﾑﾌﾌ", "ｱﾘｶﾞﾀﾋﾞｰﾑ!!(ﾉ･_･)‥‥…━━━━━☆ﾋﾟｰｰ", "ヾ(｡>﹏<｡)ﾉ", "_(:З｣ ∠)_"]
-    random_num = random.randint(0, 4)
-    reply = face[random_num]
+    try:
+        reply_data = model_data.most_similar(positive=[text])
+        txt = reply_data[0][0]
+        vector = float(reply_data[0][1])
+        if vector >= 0.8:
+            reply = "うむ！それはまさしく{0}であるな！".format(txt)
+        elif vector >= 0.5:
+            reply = "そうだな...それはおそらく{0}であろう".format(txt)
+        else:
+            reply = "うーむ...私にとっては{0}だと思うのだが...".format(txt)
+    except KeyError:
+        reply = "すまぬが{0}と云う言葉は聞いたことがないな...".format(text)
+
+
     payload = {
         "replyToken": reply_token,
         "messages": [
@@ -36,16 +53,18 @@ def reply_text(reply_token, text):
 
     return reply
 
+
 # postmethodなのでget使用としてもうまくいかない
 def callback(request):
-    reply = ""
     requests_json = json.loads(request.body.decode('utf-8'))# 辞書型に変更
     for req in requests_json['events']:# event内のものを回す
         reply_token = req['replyToken']# 返信先Token
         message_type = req['message']['type']# messageのtype
 
         if message_type == 'text':
-            text = req['message']['text'] #受信メッセを取得
-            reply += reply_text(reply_token, text)
+            text = req['message']['text'] # 受信メッセを取得
+            # リストで返ってくるため
+            reply = reply_text(reply_token, text)
 
-    return HttpResponse(reply)
+
+    return HttpResponse(reply) # キチンと動いているか確かめる(postman等を使う)
