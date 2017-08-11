@@ -7,7 +7,7 @@ import json, requests, os
 
 
 REPLY_ENDPORT = "https://api.line.me/v2/bot/message/reply" #api_reference参考
-ACCESS_TOKEN = "eLDX1DFCu3LxW6KpNXxKQXnmuc5bQoj6nSpoUFUZYXkhdqc0UU5VfnTwMh8WAKYprlMqiYMWk/ijMaEBem3bAAJ3dzPvhTZoccD+XcSstklU47hCINgyvHrfTQ0PHP8SWl5RvBCkeKJ2XYv0opWOoQdB04t89/1O/w1cDnyilFU="
+ACCESS_TOKEN = "your access_token"
 
 # Bearerのあとインデントをつけること!
 HEADER = {
@@ -54,7 +54,6 @@ def reply_text(reply_token, text):
     return reply
 
 
-# postmethodなのでget使用としてもうまくいかない
 def callback(request):
     requests_json = json.loads(request.body.decode('utf-8'))# 辞書型に変更
     for req in requests_json['events']:# event内のものを回す
